@@ -1,0 +1,2 @@
+# SMAN
+SSH Client Manager
