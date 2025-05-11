@@ -29,41 +29,9 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-//	Includes
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "connect.h"
+#ifndef SSHCONNECT_H_
+#define SSHCONNECT_H_
 
-int main() {
-	//	Variables
-	int iSelection;
-	FILE *pConfig;
-	char strConfigContent[128];
-	char strCommand[128];
+void sshConnect(char *, char *, int);
 
-	//	Open config file
-	pConfig = fopen("./sman.conf", "r");
-
-	//	Read config contents
-	while (fgets(strConfigContent, 128, pConfig))
-	{
-		strtok(strConfigContent, ";");
-		strcat(strConfigContent, "\n");
-		printf("%s", strConfigContent);	// See what it reads
-	}
-
-	//	Close config file
-	fclose(pConfig);
-	
-	//	Welcome Message
-	printf("SSH Session Manager\n");
-
-	//	Read User selection
-	//scanf("%d", iSelection);
-
-	sshConnect("ip", "username", 22);	//	Testing connect.h
-
-	//	Exit Code
-	return 0;
-}
+#endif // SSHCONNECT_H_

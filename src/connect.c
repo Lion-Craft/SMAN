@@ -30,40 +30,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 //	Includes
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "connect.h"
 
-int main() {
-	//	Variables
-	int iSelection;
-	FILE *pConfig;
-	char strConfigContent[128];
-	char strCommand[128];
-
-	//	Open config file
-	pConfig = fopen("./sman.conf", "r");
-
-	//	Read config contents
-	while (fgets(strConfigContent, 128, pConfig))
-	{
-		strtok(strConfigContent, ";");
-		strcat(strConfigContent, "\n");
-		printf("%s", strConfigContent);	// See what it reads
-	}
-
-	//	Close config file
-	fclose(pConfig);
+void sshConnect(char strHost[], char strUsername[], int iPort) {
+	char strCommand[] = "\"ssh ";
+	strcat(strCommand, strUsername);
+	strcat(strCommand, "@");
+	strcat(strCommand, strHost);
+	//strcat(strCommand, " -P ");
+	//snprintf(strCommand, sizeof(strCommand), "%d", iPort); // brokey, brain no workey
+	strcat(strCommand, "\"");
+	printf("%s", strCommand);
 	
-	//	Welcome Message
-	printf("SSH Session Manager\n");
-
-	//	Read User selection
-	//scanf("%d", iSelection);
-
-	sshConnect("ip", "username", 22);	//	Testing connect.h
-
-	//	Exit Code
-	return 0;
+	system(strCommand);
 }
