@@ -29,41 +29,102 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-//	Includes
+//  Includes
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "connect.h"
 
+//	This section should be revised eventually
+#define MAX_ENTRIES 100 // Maximum number of entries to handle
+#define MAX_LINE_LENGTH 256
+#define MAX_NAME_LENGTH 32
+#define MAX_USERNAME_LENGTH 32
+#define MAX_ADDRESS_LENGTH 64
+
+
+typedef struct {
+    char name[MAX_NAME_LENGTH];
+    char username[MAX_USERNAME_LENGTH];
+    char address[MAX_ADDRESS_LENGTH];
+    int port;
+    int useSSHKey;
+} ConfigEntry;
+
 int main() {
-	//	Variables
-	int iSelection;
-	FILE *pConfig;
-	char strConfigContent[128];
-	char strCommand[128];
+    //  Variables
+    int iSelection;
+    FILE *pConfig;
+    char strConfigContent[MAX_LINE_LENGTH];
+    ConfigEntry configEntries[MAX_ENTRIES];
+    int entryCount = 0;
+    int i;
 
-	//	Open config file
-	pConfig = fopen("./sman.conf", "r");
+    //  Open config file
+    pConfig = fopen("./sman.conf", "r");
+    if (pConfig == NULL) {
+        perror("Error opening config file");
+        return 1;
+    }
 
-	//	Read config contents
-	while (fgets(strConfigContent, 128, pConfig))
-	{
-		strtok(strConfigContent, ";");
-		strcat(strConfigContent, "\n");
-		printf("%s", strConfigContent);	// See what it reads
-	}
+    //  Read config contents
+    while (fgets(strConfigContent, MAX_LINE_LENGTH, pConfig) != NULL && entryCount < MAX_ENTRIES) {
+        // Parse the line
+        char *token;
+        char *name = strtok(strConfigContent, ";");
+        char *username = strtok(NULL, ";");
+        char *address = strtok(NULL, ";");
+        char *portStr = strtok(NULL, ";");
+        char *useSSHKeyStr = strtok(NULL, ";");
 
-	//	Close config file
-	fclose(pConfig);
-	
-	//	Welcome Message
-	printf("SSH Session Manager\n");
+        if (name != NULL && username != NULL && address != NULL && portStr != NULL && useSSHKeyStr != NULL) {
+            // Store the values in the ConfigEntry struct
+            strncpy(configEntries[entryCount].name, name, MAX_NAME_LENGTH - 1);
+            configEntries[entryCount].name[MAX_NAME_LENGTH - 1] = '\0'; // Ensure null termination
 
-	//	Read User selection
-	//scanf("%d", iSelection);
+            strncpy(configEntries[entryCount].username, username, MAX_USERNAME_LENGTH - 1);
+            configEntries[entryCount].username[MAX_USERNAME_LENGTH - 1] = '\0';
 
-	sshConnect("ip", "username", 22);	//	Testing connect.h
+            strncpy(configEntries[entryCount].address, address, MAX_ADDRESS_LENGTH - 1);
+            configEntries[entryCount].address[MAX_ADDRESS_LENGTH - 1] = '\0';
 
-	//	Exit Code
-	return 0;
+            configEntries[entryCount].port = atoi(portStr);
+            configEntries[entryCount].useSSHKey = atoi(useSSHKeyStr);
+
+            entryCount++;
+        } else {
+            fprintf(stderr, "Warning: Invalid line in config file: %s", strConfigContent);
+        }
+    }
+
+    //  Close config file
+    fclose(pConfig);
+
+    //  Welcome Message
+    printf("SSH Session Manager\n");
+
+    //  Present the list to the user
+    printf("Available Connections:\n");
+    for (i = 0; i < entryCount; i++) {
+        printf("%d: %s (%s@%s:%d)\n", i + 1, configEntries[i].name, configEntries[i].username, configEntries[i].address, configEntries[i].port);
+    }
+
+    //  Read User selection
+    printf("Enter the number of the connection to use: ");
+    if (scanf("%d", &iSelection) != 1) {
+        fprintf(stderr, "Invalid input.\n");
+        return 1;
+    }
+
+    // Validate the selection
+    if (iSelection < 1 || iSelection > entryCount) {
+        fprintf(stderr, "Invalid selection.\n");
+        return 1;
+    }
+
+    //  Call sshConnect with the selected entry
+    sshConnect(configEntries[iSelection - 1].address, configEntries[iSelection - 1].username, configEntries[iSelection - 1].port);
+
+    //  Exit Code
+    return 0;
 }
