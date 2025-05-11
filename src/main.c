@@ -60,12 +60,24 @@ int main() {
     int entryCount = 0;
     int i;
 
+	//	Define Platform-Specific paths
+	#ifdef __WIN32__	//	Windows
     //  Open config file
-    pConfig = fopen("./sman.conf", "r");
-    if (pConfig == NULL) {
-        perror("Error opening config file");
+	char* strPath = getenv("LOCALAPPDATA");
+	strcat(strPath, "\\SMAN\\sman.conf");
+    pConfig = fopen(strPath, "r");
+	if (pConfig == NULL) {
+        perror("Error opening config file (Platform: Windows)");
         return 1;
     }
+	#else	// Unix/Unix-like
+	//  Open config file
+    pConfig = fopen("~/.config/sman.conf", "r");
+	if (pConfig == NULL) {
+        perror("Error opening config file (Platform: UNIX)");
+        return 1;
+    }
+	#endif
 
     //  Read config contents
     while (fgets(strConfigContent, MAX_LINE_LENGTH, pConfig) != NULL && entryCount < MAX_ENTRIES) {
