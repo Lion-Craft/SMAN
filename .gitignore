@@ -70,3 +70,6 @@ CMakeUserPresets.json
 
 # Misc
 test.c
+
+# Allow Build Script
+!build-MinGW.cmd
