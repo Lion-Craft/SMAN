@@ -36,14 +36,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "connect.h"
 
 void sshConnect(char strHost[], char strUsername[], int iPort) {
-	char strCommand[] = "\"ssh ";
-	strcat(strCommand, strUsername);
-	strcat(strCommand, "@");
-	strcat(strCommand, strHost);
-	//strcat(strCommand, " -P ");
-	//snprintf(strCommand, sizeof(strCommand), "%d", iPort); // brokey, brain no workey
-	strcat(strCommand, "\"");
-	printf("%s", strCommand);
-	
-	system(strCommand);
+    char strCommand[256];
+
+	//	Format Command
+    snprintf(strCommand, sizeof(strCommand), "ssh %s@%s -P %d", strUsername, strHost, iPort);
+
+    printf("%s\n", strCommand);
+
+	//	Run SSH
+    system(strCommand);
 }
