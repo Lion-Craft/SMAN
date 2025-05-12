@@ -41,7 +41,7 @@ void sshConnect(char strHost[], char strUsername[], int iPort) {
 	//	Format Command
     snprintf(strCommand, sizeof(strCommand), "ssh %s@%s -P %d", strUsername, strHost, iPort);
 
-    printf("%s\n", strCommand);
+    printf("\n");
 
 	//	Run SSH
     system(strCommand);
