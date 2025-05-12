@@ -72,7 +72,9 @@ int main() {
     }
 	#else	// Unix/Unix-like
 	//  Open config file
-    pConfig = fopen("~/.config/sman.conf", "r");
+	char* strPath = getenv("HOME");
+	strcat(strPath, "/.config/sman.conf");
+    pConfig = fopen(strPath, "r");
 	if (pConfig == NULL) {
         perror("Error opening config file (Platform: UNIX)");
         return 1;
