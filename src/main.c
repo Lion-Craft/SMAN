@@ -43,7 +43,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MAX_ADDRESS_LENGTH 64
 
 
-typedef struct {
+typedef struct 
+{
     char name[MAX_NAME_LENGTH];
     char username[MAX_USERNAME_LENGTH];
     char address[MAX_ADDRESS_LENGTH];
@@ -51,7 +52,8 @@ typedef struct {
     int useSSHKey;
 } ConfigEntry;
 
-int main() {
+int main() 
+{
     //  Variables
     int iSelection;
     FILE *pConfig;
@@ -66,23 +68,29 @@ int main() {
 	char* strPath = getenv("LOCALAPPDATA");
 	strcat(strPath, "\\SMAN\\sman.conf");
     pConfig = fopen(strPath, "r");
-	if (pConfig == NULL) {
+
+	if (pConfig == NULL) 
+    {
         perror("Error opening config file (Platform: Windows)");
         return 1;
     }
+
 	#else	// Unix/Unix-like
 	//  Open config file
 	char* strPath = getenv("HOME");
 	strcat(strPath, "/.config/sman.conf");
     pConfig = fopen(strPath, "r");
-	if (pConfig == NULL) {
+
+	if (pConfig == NULL)
+    {
         perror("Error opening config file (Platform: UNIX)");
         return 1;
     }
 	#endif
 
     //  Read config contents
-    while (fgets(strConfigContent, MAX_LINE_LENGTH, pConfig) != NULL && entryCount < MAX_ENTRIES) {
+    while (fgets(strConfigContent, MAX_LINE_LENGTH, pConfig) != NULL && entryCount < MAX_ENTRIES)
+    {
         // Parse the line
         char *token;
         char *name = strtok(strConfigContent, ";");
@@ -91,7 +99,8 @@ int main() {
         char *portStr = strtok(NULL, ";");
         char *useSSHKeyStr = strtok(NULL, ";");
 
-        if (name != NULL && username != NULL && address != NULL && portStr != NULL && useSSHKeyStr != NULL) {
+        if (name != NULL && username != NULL && address != NULL && portStr != NULL && useSSHKeyStr != NULL)
+        {
             // Store the values in the ConfigEntry struct
             strncpy(configEntries[entryCount].name, name, MAX_NAME_LENGTH - 1);
             configEntries[entryCount].name[MAX_NAME_LENGTH - 1] = '\0'; // Ensure null termination
@@ -106,7 +115,9 @@ int main() {
             configEntries[entryCount].useSSHKey = atoi(useSSHKeyStr);
 
             entryCount++;
-        } else {
+        } 
+        else 
+        {
             fprintf(stderr, "Warning: Invalid line in config file: %s", strConfigContent);
         }
     }
@@ -148,6 +159,7 @@ int main() {
             return 1;
         }
 
+        // Clean Exit
         if (iSelection < 1) 
         {
             printf("Exiting.\n");
