@@ -114,30 +114,49 @@ int main() {
     //  Close config file
     fclose(pConfig);
 
-    //  Welcome Message
-    printf("SSH Session Manager\n");
+    //  Temporarily set iSelection to 1
+    iSelection = 1;
 
-    //  Present the list to the user
-    printf("Available Connections:\n");
-    for (i = 0; i < entryCount; i++) {
-        printf("%d: %s (%s@%s:%d)\n", i + 1, configEntries[i].name, configEntries[i].username, configEntries[i].address, configEntries[i].port);
+    //  Main Loop. Enter a number below 0 to exit
+    while (iSelection >= 1)
+    {
+        //  Welcome Message
+        printf("SSH Session Manager\n");
+
+        //  Help Message
+        printf("\nEnter 0 or Ctrl+C to Exit.\n\n");
+
+        //  Present the list to the user
+        printf("Available Connections:\n");
+        for (i = 0; i < entryCount; i++) 
+        {
+            printf("%d: %s (%s@%s:%d)\n", i + 1, configEntries[i].name, configEntries[i].username, configEntries[i].address, configEntries[i].port);
+        }
+
+        //  Read User selection
+        printf("Enter the number of the connection to use: ");
+        if (scanf("%d", &iSelection) != 1) 
+        {
+            fprintf(stderr, "Invalid input.\n");
+            return 1;
+        }
+
+        // Validate the selection
+        if (iSelection > entryCount) 
+        {
+            fprintf(stderr, "Invalid selection.\n");
+            return 1;
+        }
+
+        if (iSelection < 1) 
+        {
+            printf("Exiting.\n");
+            return 0;
+        }
+
+        //  Call sshConnect with the selected entry
+        sshConnect(configEntries[iSelection - 1].address, configEntries[iSelection - 1].username, configEntries[iSelection - 1].port);
     }
-
-    //  Read User selection
-    printf("Enter the number of the connection to use: ");
-    if (scanf("%d", &iSelection) != 1) {
-        fprintf(stderr, "Invalid input.\n");
-        return 1;
-    }
-
-    // Validate the selection
-    if (iSelection < 1 || iSelection > entryCount) {
-        fprintf(stderr, "Invalid selection.\n");
-        return 1;
-    }
-
-    //  Call sshConnect with the selected entry
-    sshConnect(configEntries[iSelection - 1].address, configEntries[iSelection - 1].username, configEntries[iSelection - 1].port);
 
     //  Exit Code
     return 0;
