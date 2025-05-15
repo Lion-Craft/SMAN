@@ -33,5 +33,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define SSHCONNECT_H_
 
 void sshConnect(char *, char *, int);
+void sshKeyConnect(char *, char *, int, char *);
 
 #endif // SSHCONNECT_H_

@@ -46,3 +46,14 @@ void sshConnect(char strHost[], char strUsername[], int iPort) {
 	//	Run SSH
     system(strCommand);
 }
+void sshKeyConnect(char strHost[], char strUsername[], int iPort, char strKeyPath[]) {
+    char strCommand[256];
+
+	//	Format Command
+    snprintf(strCommand, sizeof(strCommand), "ssh %s@%s -P %d -i %s", strUsername, strHost, iPort, strKeyPath);
+
+    printf("\n");
+
+	//	Run SSH
+    system(strCommand);
+}
