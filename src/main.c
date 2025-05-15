@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <string.h>
 #include "connect.h"
+#include "version.h"
 
 //	This section should be revised eventually
 #define MAX_ENTRIES 100 // Maximum number of entries to handle
@@ -145,6 +146,7 @@ int main()
     {
         //  Welcome Message
         printf("SSH Session Manager\n");
+        printf("Version %d.%d\n",VERSION_MAJOR, VERSION_MINOR);
 
         //  Help Message
         printf("\nEnter 0 or Ctrl+C to Exit.\n\n");
