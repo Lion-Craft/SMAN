@@ -59,7 +59,7 @@ int main()
     FILE *pConfig;
     char strConfigContent[MAX_LINE_LENGTH];
     ConfigEntry configEntries[MAX_ENTRIES];
-    int entryCount = 0;
+    int iEntryCount = 0;
     int i;
 
 	//	Define Platform-Specific paths
@@ -89,32 +89,31 @@ int main()
 	#endif
 
     //  Read config contents
-    while (fgets(strConfigContent, MAX_LINE_LENGTH, pConfig) != NULL && entryCount < MAX_ENTRIES)
+    while (fgets(strConfigContent, MAX_LINE_LENGTH, pConfig) != NULL && iEntryCount < MAX_ENTRIES)
     {
         // Parse the line
-        char *token;
-        char *name = strtok(strConfigContent, ";");
-        char *username = strtok(NULL, ";");
-        char *address = strtok(NULL, ";");
-        char *portStr = strtok(NULL, ";");
-        char *useSSHKeyStr = strtok(NULL, ";");
+        char *strName = strtok(strConfigContent, ";");
+        char *strUsername = strtok(NULL, ";");
+        char *strAddress = strtok(NULL, ";");
+        char *strPort = strtok(NULL, ";");
+        char *strKeyLocation = strtok(NULL, ";");
 
-        if (name != NULL && username != NULL && address != NULL && portStr != NULL && useSSHKeyStr != NULL)
+        if (strName != NULL && strUsername != NULL && strAddress != NULL && strPort != NULL && strKeyLocation != NULL)
         {
             // Store the values in the ConfigEntry struct
-            strncpy(configEntries[entryCount].name, name, MAX_NAME_LENGTH - 1);
-            configEntries[entryCount].name[MAX_NAME_LENGTH - 1] = '\0'; // Ensure null termination
+            strncpy(configEntries[iEntryCount].name, strName, MAX_NAME_LENGTH - 1);
+            configEntries[iEntryCount].name[MAX_NAME_LENGTH - 1] = '\0'; // Ensure null termination
 
-            strncpy(configEntries[entryCount].username, username, MAX_USERNAME_LENGTH - 1);
-            configEntries[entryCount].username[MAX_USERNAME_LENGTH - 1] = '\0';
+            strncpy(configEntries[iEntryCount].username, strUsername, MAX_USERNAME_LENGTH - 1);
+            configEntries[iEntryCount].username[MAX_USERNAME_LENGTH - 1] = '\0';
 
-            strncpy(configEntries[entryCount].address, address, MAX_ADDRESS_LENGTH - 1);
-            configEntries[entryCount].address[MAX_ADDRESS_LENGTH - 1] = '\0';
+            strncpy(configEntries[iEntryCount].address, strAddress, MAX_ADDRESS_LENGTH - 1);
+            configEntries[iEntryCount].address[MAX_ADDRESS_LENGTH - 1] = '\0';
 
-            configEntries[entryCount].port = atoi(portStr);
-            configEntries[entryCount].useSSHKey = atoi(useSSHKeyStr);
+            configEntries[iEntryCount].port = atoi(strPort);
+            configEntries[iEntryCount].useSSHKey = atoi(strKeyLocation);
 
-            entryCount++;
+            iEntryCount++;
         } 
         else 
         {
@@ -139,7 +138,7 @@ int main()
 
         //  Present the list to the user
         printf("Available Connections:\n");
-        for (i = 0; i < entryCount; i++) 
+        for (i = 0; i < iEntryCount; i++) 
         {
             printf("%d: %s (%s@%s:%d)\n", i + 1, configEntries[i].name, configEntries[i].username, configEntries[i].address, configEntries[i].port);
         }
@@ -153,7 +152,7 @@ int main()
         }
 
         // Validate the selection
-        if (iSelection > entryCount) 
+        if (iSelection > iEntryCount) 
         {
             fprintf(stderr, "Invalid selection.\n");
             return 1;
