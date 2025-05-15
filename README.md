@@ -4,6 +4,9 @@ SSH Client Manager (SMAN) allows you to easily connect to your SSH Servers using
 
 Supports x86 and ARM Windows, Linux, MacOS.
 
+![grafik](https://github.com/user-attachments/assets/10140f46-30c8-45d0-a9ad-515266870dc3)
+
+
 # Config File
 Before running the program for the first time, you must create a config file. Use the example.conf for guidance on how the file is formatted.
 
