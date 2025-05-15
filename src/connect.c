@@ -35,24 +35,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>
 #include "connect.h"
 
+//  Connect without key
 void sshConnect(char strHost[], char strUsername[], int iPort) {
     char strCommand[256];
 
 	//	Format Command
     snprintf(strCommand, sizeof(strCommand), "ssh %s@%s -P %d", strUsername, strHost, iPort);
 
-    printf("\n");
-
 	//	Run SSH
     system(strCommand);
 }
+
+//  Connect with key from path
 void sshKeyConnect(char strHost[], char strUsername[], int iPort, char strKeyPath[]) {
     char strCommand[256];
 
 	//	Format Command
     snprintf(strCommand, sizeof(strCommand), "ssh %s@%s -P %d -i %s", strUsername, strHost, iPort, strKeyPath);
-
-    printf("\n");
 
 	//	Run SSH
     system(strCommand);

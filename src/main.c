@@ -41,6 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MAX_NAME_LENGTH 32
 #define MAX_USERNAME_LENGTH 32
 #define MAX_ADDRESS_LENGTH 64
+#define MAX_KEY_PATH_LENGTH 512
 
 
 typedef struct 
@@ -50,6 +51,7 @@ typedef struct
     char address[MAX_ADDRESS_LENGTH];
     int port;
     int useSSHKey;
+    char keyPath[MAX_KEY_PATH_LENGTH];
 } ConfigEntry;
 
 int main() 
@@ -110,8 +112,19 @@ int main()
             strncpy(configEntries[iEntryCount].address, strAddress, MAX_ADDRESS_LENGTH - 1);
             configEntries[iEntryCount].address[MAX_ADDRESS_LENGTH - 1] = '\0';
 
+            //  Check if key auth is turned off
+            if (strcmp(strKeyLocation,"Off\n") == 0)
+            {
+                configEntries[iEntryCount].useSSHKey = 0;
+            } 
+            else
+            {
+                configEntries[iEntryCount].useSSHKey = 1;
+                strncpy(configEntries[iEntryCount].keyPath, strKeyLocation, MAX_KEY_PATH_LENGTH - 1);
+                configEntries[iEntryCount].keyPath[MAX_KEY_PATH_LENGTH - 1] = '\0';
+            }
+
             configEntries[iEntryCount].port = atoi(strPort);
-            configEntries[iEntryCount].useSSHKey = atoi(strKeyLocation);
 
             iEntryCount++;
         } 
@@ -165,10 +178,17 @@ int main()
             return 0;
         }
 
-        //  Call sshConnect with the selected entry
-        sshConnect(configEntries[iSelection - 1].address, configEntries[iSelection - 1].username, configEntries[iSelection - 1].port);
+        if (configEntries[iSelection - 1].useSSHKey)
+        {
+            //  Call sshKeyConnect with the selected entry
+            sshKeyConnect(configEntries[iSelection - 1].address, configEntries[iSelection - 1].username, configEntries[iSelection - 1].port, configEntries[iSelection - 1].keyPath);
+        }
+        else
+        {
+            //  Call sshConnect with the selected entry
+            sshConnect(configEntries[iSelection - 1].address, configEntries[iSelection - 1].username, configEntries[iSelection - 1].port);
+        }
     }
-
     //  Exit Code
     return 0;
 }
