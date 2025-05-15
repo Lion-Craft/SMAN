@@ -11,7 +11,7 @@ Supports x86 and ARM Windows, Linux, MacOS.
 Before running the program for the first time, you must create a config file. Use the example.conf for guidance on how the file is formatted.
 
 ## Windows
-The config file should be stored under %LOCALAPPDATA$\SMAN\sman.conf
+The config file should be stored under %LOCALAPPDATA%\SMAN\sman.conf
 
 ## Linux/MacOS
 The config file should be stored under ~/.config/sman.conf
