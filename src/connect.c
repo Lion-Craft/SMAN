@@ -40,7 +40,7 @@ void sshConnect(char strHost[], char strUsername[], int iPort) {
     char strCommand[256];
 
 	//	Format Command
-    snprintf(strCommand, sizeof(strCommand), "ssh %s@%s -P %d", strUsername, strHost, iPort);
+    snprintf(strCommand, sizeof(strCommand), "ssh %s@%s -p %d", strUsername, strHost, iPort);
 
 	//	Run SSH
     system(strCommand);
@@ -51,7 +51,7 @@ void sshKeyConnect(char strHost[], char strUsername[], int iPort, char strKeyPat
     char strCommand[256];
 
 	//	Format Command
-    snprintf(strCommand, sizeof(strCommand), "ssh %s@%s -P %d -i %s", strUsername, strHost, iPort, strKeyPath);
+    snprintf(strCommand, sizeof(strCommand), "ssh %s@%s -p %d -i %s", strUsername, strHost, iPort, strKeyPath);
 
 	//	Run SSH
     system(strCommand);
